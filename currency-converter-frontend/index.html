@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+
+    <title>Обмен валют by Alexander Bobretsov</title>
+</head>
+<body ng-app="CurrencyConverterApp">
+
+<div class="container" ng-controller="CurrencyController">
+
+    <div style="text-align: center;">
+    <table class="table table-striped" style="font-size: 16px; color: mintcream">
+        <thead>
+        <tr>
+            <th scope="col" bgcolor="#1e90ff">Обменник by Alexander Bobretsov &#169 2022 год</th>
+        </tr>
+        </thead>
+    </table>
+    </div>
+
+
+        <table class="table table-striped">
+        <tbody>
+<!--        <div style="text-align: center;">-->
+<!--        <div id="datedisplay"></div>-->
+<!--        <div id="timedisplay"></div>-->
+<!--        </div>-->
+
+        <tr><td style="text-align: left;">
+            <select name="cur1" id="selectedCur1" ng-model="selectedCur1" class="form-control">
+                <option value="">Из валюты</option>
+                <option ng-repeat="currency in currencyList" value="id:{{currency.id}}charcode:{{currency.charcode}}value:{{currency.value}}">{{currency.name}}&nbsp&nbsp&nbsp{{currency.charcode}}</option>
+            </select>
+        </td></tr>
+        <tr><td style="text-align: left;">
+            <select name="cur2" id="selectedCur2" ng-model="selectedCur2" class="form-control">
+                <option value="">В валюту</option>
+                <option ng-repeat="currency in currencyList" value="id:{{currency.id}}charcode:{{currency.charcode}}value:{{currency.value}}">{{currency.name}}&nbsp&nbsp&nbsp{{currency.charcode}}</option>
+            </select>
+        </td></tr>
+    <tr><td>
+        <div class="input-group mb-3 mt-3">
+            <input ng-model="currency1_sum" type="text" class="form-control" placeholder="Введите сумму" aria-label="Введите сумму"
+                   aria-describedby="basic-addon2" onkeypress="validate()">
+            <div class="input-group-append">
+                <button ng-click="create(currency1_sum,currency2_sum, currency1_charcode, currency2_charcode, date_exchange, status_exchange, course)" class="btn btn-primary" type="submit">Обменять</button>
+            </div>
+        </div>
+    </td></tr>
+            <tr><td>
+                Текущий курс: 1 {{currency1_charcode = selectedCur1.slice(selectedCur1.indexOf("charcode:")+9,selectedCur1.indexOf("value:"))}} = {{course = selectedCur1.slice(selectedCur1.indexOf("value:")+6,selectedCur1.length).replace(",",".")/selectedCur2.slice(selectedCur2.indexOf("value:")+6,selectedCur2.length).replace(",",".")}} {{currency2_charcode = selectedCur2.slice(selectedCur2.indexOf("charcode:")+9,selectedCur2.indexOf("value:"))}}. В результате обмена Вы получите: {{currency2_sum = currency1_sum*course}} {{selectedCur2.slice(selectedCur2.indexOf("charcode:")+9,selectedCur2.indexOf("value:"))}}
+            </td></tr>
+    </table>
+    <table class="table table-striped" style="font-size: 12px;">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Дата/Время обмена</th>
+            <th scope="col">Из валюты</th>
+            <th scope="col">Сумма отправлена</th>
+            <th scope="col">В валюту</th>
+            <th scope="col">Сумма получена</th>
+            <th scope="col">Курс обмена</th>
+            <th scope="col">Статус</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="currencyhistory in currencyListHistory">
+            <th scope="row">{{currencyhistory.id}}</th>
+            <td>{{currencyhistory.date_exchange}}</td>
+            <td>{{currencyhistory.currency1_charcode}}</td>
+            <td>{{currencyhistory.currency1_sum}}</td>
+            <td>{{currencyhistory.currency2_charcode}}</td>
+            <td>{{currencyhistory.currency2_sum}}</td>
+            <td>{{currencyhistory.course}}</td>
+            <td>{{currencyhistory.status_exchange}}</td>
+            <td>
+                <button ng-click="delete(currencyhistory)" type="submit" class="btn btn-outline-danger" style="font-size: 12px;">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="js/app.js"></script>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
