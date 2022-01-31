@@ -53,7 +53,7 @@ public class Parser {
 
             currencyService.delete();
 
-            for (int i = 0; i < doc.getAllElements().select("CharCode").stream().count(); i++) {
+            for (int i = 0; i < doc.getAllElements().select("CharCode").size(); i++) {
                 Element chCode = doc.getAllElements().select("CharCode").get(i);
                 Element name = doc.getAllElements().select("Name").get(i);
                 Element value = doc.getAllElements().select("Value").get(i);

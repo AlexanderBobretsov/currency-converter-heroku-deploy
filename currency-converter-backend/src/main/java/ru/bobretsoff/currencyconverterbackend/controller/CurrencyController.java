@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1/currency")
 @RestController
-@CrossOrigin(origins = "http://localhost:63342")
+@CrossOrigin(origins = "https://converter-bobretsoff-frontend.herokuapp.com")
 public class CurrencyController {
 
     /** инъекция интерфейса CurrencyService.*/
@@ -41,7 +41,7 @@ public class CurrencyController {
 
     @PostMapping(path = "/history",consumes = "application/json", produces = "application/json")
     public CurrencyConverterHistory create(@RequestBody CurrencyConverterHistory currencyConverterHistory) {
-       return currencyConverterHistoryService.create(currencyConverterHistory);
+        return currencyConverterHistoryService.create(currencyConverterHistory);
     }
 
     @DeleteMapping(path = "/history/{id}")
