@@ -13,42 +13,37 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
             });
 
     $http.get("http://localhost:8080/api/v1/currency/all/history")
-         .then(resp => {
-                 $scope.currencyListHistory = resp.data;
+        .then(resp => {
+                $scope.currencyListHistory = resp.data;
 
-                 console.log($scope.currencyListHistory);
+                console.log($scope.currencyListHistory);
             },
             resp => {
                 console.error(resp);
-             });
+            });
 
-    $scope.currency1_sum = '';
-    $scope.currency2_sum = '';
-
-    $scope.currency1_charcode = '';
-    $scope.currency2_charcode = '';
 
     var currentDateValue='';
     var currentTimeValue='';
     getDate();
-    $scope.date_exchange = currentDateValue + "/" + currentTimeValue;
-    $scope.status_exchange= 'исполнено';
-
-    $scope.course= '';
+    date_exchange = currentDateValue + "/\n" + currentTimeValue;
+    status_exchange = 'исполнено';
+    currency2_sum = '';
 
     $scope.currencyhistory = '';
+    $scope.currency_sum = null;
 
-    $scope.create = function (currency1_sum,currency2_sum,currency1_charcode,currency2_charcode,date_exchange,status_exchange,course) {
+    $scope.create = function () {
 
-        if (currency2_sum!=="") {
+        if (currency2_sum!=='') {
 
             $http.post("http://localhost:8080/api/v1/currency/history", {
-                'currency1_sum': currency1_sum,
-                'currency2_sum': currency2_sum,
-                'currency1_charcode': currency1_charcode,
-                'currency2_charcode': currency2_charcode,
-                'status_exchange': status_exchange,
-                'date_exchange': date_exchange,
+                'currency1Sum': currency1_sum,
+                'currency2Sum': currency2_sum,
+                'currency1Charcode': currency1_charcode,
+                'currency2Charcode': currency2_charcode,
+                'statusExchange': status_exchange,
+                'dateExchange': date_exchange,
                 'course': course
 
             })
@@ -62,8 +57,11 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
                         console.error(resp);
                     });
 
-            $scope.currency1_sum = '';
+
         }
+
+        document.getElementById('currency1_sum').value='';
+        document.getElementById("currency2_sum").innerHTML = '';
     }
 
     $scope.delete = function (currencyhistory) {
@@ -79,18 +77,7 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
                 });
     }
 
-    $scope.select = function (currency) {
-        $http.select("http://localhost:8080/api/v1/currency/" + currency.id)
-            .then(resp => {
-                    let ix = $scope.currencyList.map(currency => currency.id).indexOf(currency.id);
-                   // $scope.currencyList.splice(ix, 1);
-                    console.log(ix);
 
-                },
-                resp => {
-                    console.error(resp);
-                });
-    }
 
     function getDate()
     {
@@ -117,15 +104,15 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
 
         currentDateValue = day + "." + month + "." + year;
         currentTimeValue = hours + ':' + minutes + ':' + seconds;
-        // document.getElementById('datedisplay').innerHTML = "Сегодня: " + day + "." + month + "." + year;
-        // document.getElementById('timedisplay').innerHTML = "Текущее время: " + hours + ':' + minutes + ':' + seconds;
     }
     setInterval(getDate, 0);
+
 
 })
 
 
 function validate(evt) {
+
     var theEvent = evt || window.event;
     var key = theEvent.keyCode || theEvent.which;
     key = String.fromCharCode( key );
@@ -141,33 +128,48 @@ function validate(evt) {
     }
 }
 
-// CurrencyConverterApp.controller('CurrencyConverterHistoryController', function ($scope, $http) {
-//
-//     $http.get("http://localhost:8080/api/v1/currency_history/all")
-//         .then(resp => {
-//                 $scope.currencyListHistory = resp.data;
-//
-//                 console.log($scope.currencyListHistory);
-//             },
-//             resp => {
-//                 console.error(resp);
-//             });
-//
-//     $scope.name = '';
-//
-//     $scope.create = function (currency1_sum) {
-//
-//         // $http.post("http://localhost:8080/api/v1/currency_history", {'currency1_sum': currency1_sum})
-//         $http.post("http://localhost:8080/api/v1/currency_history", {"currency1_charcode:\'null\',currency2_charcode:\'null\',course:\'null\',currency1_sum:\'null\',currency2_sum:\'null\',status_exchange:\'null\',date_exchange":currency1_sum})
-//             .then(resp => {
-//                     $scope.currencyListHistory.push(resp.data);
-//                     console.log($scope.currencyListHistory);
-//
-//                 },
-//                 resp => {
-//                     console.error(resp);
-//                 });
-//
-//         $scope.name = '';
-//     }
-// }
+
+
+function getCourse(cur1,cur2) {
+    // console.log(cur1);
+    // console.log(cur2);
+
+    document.getElementById('currency1_sum').value='';
+    document.getElementById("currency2_sum").innerHTML = '';
+
+
+
+    if (cur1!=="") {
+        val1 = JSON.parse(cur1);
+        currency1_charcode = val1.charcode;
+        document.getElementById("currency1_charcode").innerHTML = currency1_charcode + " равен ";
+        document.getElementById("course_begin").innerHTML = 1;
+    }
+    if (cur2!=="") {
+        val2 = JSON.parse(cur2);
+        currency2_charcode = val2.charcode;
+        document.getElementById("currency2_charcode").innerHTML = currency2_charcode;
+        document.getElementById("currency22_charcode").innerHTML = currency2_charcode;
+    }
+    if (val1!==null && val2!==null) {
+        course = (parseFloat(val1.value)/parseFloat(val2.value)).toFixed(4);
+        console.log(course);
+        document.getElementById("course").innerHTML = course;
+        //  getSumExchange(currency1_sum);
+
+    }
+
+}
+
+
+function getSumExchange(cur_sum1) {
+    currency1_sum = cur_sum1;
+    currency2_sum = '0';
+    if (currency1_sum!=='') {
+        currency2_sum =  (cur_sum1 * this.course).toFixed(4);
+        console.log(currency2_sum);
+        console.log(currency1_sum);
+        document.getElementById("currency2_sum").innerHTML = currency2_sum;
+    }
+
+}
