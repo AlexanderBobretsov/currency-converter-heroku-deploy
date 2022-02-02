@@ -2,7 +2,7 @@ let CurrencyConverterApp = angular.module('CurrencyConverterApp', []);
 
 CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
 
-    $http.get("http://localhost:8080/api/v1/currency/all")
+    $http.get("https://currency-converter-bobretsoff.herokuapp.com:443/api/v1/currency/all")
         .then(resp => {
                 $scope.currencyList = resp.data;
 
@@ -12,7 +12,7 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
                 console.error(resp);
             });
 
-    $http.get("http://localhost:8080/api/v1/currency/all/history")
+    $http.get("https://currency-converter-bobretsoff.herokuapp.com:443/api/v1/currency/all/history")
         .then(resp => {
                 $scope.currencyListHistory = resp.data;
 
@@ -37,7 +37,7 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
 
         if (currency2_sum!=='') {
 
-            $http.post("http://localhost:8080/api/v1/currency/history", {
+            $http.post("https://currency-converter-bobretsoff.herokuapp.com:443/api/v1/currency/history", {
                 'currency1Sum': currency1_sum,
                 'currency2Sum': currency2_sum,
                 'currency1Charcode': currency1_charcode,
@@ -65,7 +65,7 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
     }
 
     $scope.delete = function (currencyhistory) {
-        $http.delete("http://localhost:8080/api/v1/currency/history/" + currencyhistory.id)
+        $http.delete("https://currency-converter-bobretsoff.herokuapp.com:443/api/v1/currency/history/" + currencyhistory.id)
             .then(resp => {
                     let ix = $scope.currencyListHistory.map(currencyhistory => currencyhistory.id).indexOf(currencyhistory.id);
                     $scope.currencyListHistory.splice(ix, 1);
