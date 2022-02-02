@@ -60,8 +60,8 @@ CurrencyConverterApp.controller('CurrencyController', function ($scope, $http) {
 
         }
 
-        document.getElementById('currency1_sum').value='';
-        document.getElementById("currency2_sum").innerHTML = '';
+        Initial();
+
     }
 
     $scope.delete = function (currencyhistory) {
@@ -134,10 +134,7 @@ function getCourse(cur1,cur2) {
     // console.log(cur1);
     // console.log(cur2);
 
-    document.getElementById('currency1_sum').value='';
-    document.getElementById("currency2_sum").innerHTML = '';
-
-
+    Initial();
 
     if (cur1!=="") {
         val1 = JSON.parse(cur1);
@@ -171,5 +168,16 @@ function getSumExchange(cur_sum1) {
         console.log(currency1_sum);
         document.getElementById("currency2_sum").innerHTML = currency2_sum;
     }
+
+
+
+}
+
+function Initial() {
+
+    currency1_sum='';
+    currency2_sum='';
+    document.getElementById('currency1_sum').value='';
+    document.getElementById("currency2_sum").innerHTML = '';
 
 }
